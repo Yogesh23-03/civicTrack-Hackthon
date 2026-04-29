@@ -94,35 +94,79 @@ Team CivicTrack`;
   await sendEmail(userEmail, subject, text, html);
 }
 
-async function sendTransactionEmail(userEmail, name, amount, toAccount) {
-  const subject = "Transaction Successful!";
+
+
+async function sendComplaintRaisedEmail(userEmail, name, complaint) {
+  const subject = "Complaint Raised Successfully - CivicTrack";
+
   const text = `Hello ${name},
 
-Your transaction of $${amount} to account ${toAccount} was successful.
+Your complaint has been raised successfully.
+
+Title: ${complaint.title}
+Category: ${complaint.category}
+Description: ${complaint.description}
+Status: ${complaint.status || "pending"}
+
+We will notify you when there is an update.
 
 Best regards,
-The Backend Ledger Team`;
+Team CivicTrack`;
 
-  const html = `<p>Hello ${name},</p>
-  <p>Your transaction of $${amount} to account ${toAccount} was successful.</p>
-  <p>Best regards,<br>The Backend Ledger Team</p>`;
+  const html = `
+    <h2>Complaint Raised Successfully 🚧</h2>
+    <p>Hello ${name},</p>
+
+    <p>Your complaint has been raised successfully.</p>
+
+    <h3>Complaint Details:</h3>
+    <p><strong>Title:</strong> ${complaint.title}</p>
+    <p><strong>Category:</strong> ${complaint.category}</p>
+    <p><strong>Description:</strong> ${complaint.description}</p>
+    <p><strong>Status:</strong> ${complaint.status || "pending"}</p>
+
+    <p>We will notify you when there is an update.</p>
+
+    <p><strong>— Team CivicTrack</strong></p>
+  `;
 
   await sendEmail(userEmail, subject, text, html);
 }
 
-async function sendTransactionFailureEmail(userEmail, name, amount, toAccount) {
-  const subject = "Transaction Failed";
+
+async function sendComplaintSuccessEmail(userEmail, name, complaint) {
+  const subject = "Your Complaint Has Been Resolved - CivicTrack";
+
   const text = `Hello ${name},
 
-We regret to inform you that your transaction of $${amount} to account ${toAccount} has failed. Please try again later.
+Good news! Your complaint has been marked as resolved.
+
+Title: ${complaint.title}
+Category: ${complaint.category}
+Description: ${complaint.description}
+Status: Success
+
+Thank you for helping improve your community.
 
 Best regards,
-The Backend Ledger Team`;
+Team CivicTrack`;
 
-  const html = `<p>Hello ${name},</p>
-  <p>We regret to inform you that your transaction of $${amount} to account ${toAccount} has failed.</p>
-  <p>Please try again later.</p>
-  <p>Best regards,<br>The Backend Ledger Team</p>`;
+  const html = `
+    <h2>Complaint Resolved ✅</h2>
+    <p>Hello ${name},</p>
+
+    <p>Good news! Your complaint has been marked as resolved.</p>
+
+    <h3>Complaint Details:</h3>
+    <p><strong>Title:</strong> ${complaint.title}</p>
+    <p><strong>Category:</strong> ${complaint.category}</p>
+    <p><strong>Description:</strong> ${complaint.description}</p>
+    <p><strong>Status:</strong> Success</p>
+
+    <p>Thank you for helping improve your community.</p>
+
+    <p><strong>— Team CivicTrack</strong></p>
+  `;
 
   await sendEmail(userEmail, subject, text, html);
 }
@@ -132,6 +176,6 @@ The Backend Ledger Team`;
 // =======================
 module.exports = {
   sendRegistrationEmail,
-  sendTransactionEmail,
-  sendTransactionFailureEmail,
+  sendComplaintRaisedEmail,
+  sendComplaintSuccessEmail
 };
