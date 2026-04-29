@@ -110,7 +110,7 @@ router.post('/', auth, async (req, res) => {
       userId: req.user.id
     });
     await complaint.save();
-    onst user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id);
 
 await sendComplaintRaisedEmail(
   user.email,
