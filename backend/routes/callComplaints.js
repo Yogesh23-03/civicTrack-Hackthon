@@ -2,10 +2,7 @@ const router = require('express').Router();
 const CallComplaint = require('../models/CallComplaint');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
-const {
-  sendComplaintRaisedEmail,
-  sendComplaintSuccessEmail
-} = require('../services/email.services');
+
 
 const categories = ['Roads', 'Sanitation', 'Water', 'Electricity', 'Other'];
 const severities = ['low', 'medium', 'high', 'critical'];
@@ -111,14 +108,7 @@ router.post('/vapi-webhook', async (req, res) => {
     });
 
     await complaint.save();
-    if (data.callerEmail) {
-  await sendComplaintRaisedEmail(
-    data.callerEmail,
-    data.callerName || "Citizen",
-    complaint
-  );
-}
-
+   
     if (req.io) {
       req.io.emit('call-complaint-created', normalizeCallComplaint(complaint));
     }
@@ -167,16 +157,7 @@ router.patch('/:id/status', auth, async (req, res) => {
     );
 
     if (!complaint) return res.status(404).json({ message: 'Call complaint not found' });
-    if (
-  String(status).toLowerCase() === "success" &&
-  complaint.callerEmail
-) {
-  await sendComplaintSuccessEmail(
-    complaint.callerEmail,
-    complaint.callerName || "Citizen",
-    complaint
-  );
-}
+  
     res.json({ success: true, complaint: normalizeCallComplaint(complaint) });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
